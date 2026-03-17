@@ -3,6 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/peasytools/peasy-document-go.svg)](https://pkg.go.dev/github.com/peasytools/peasy-document-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/peasytools/peasy-document-go)](https://goreportcard.com/report/github.com/peasytools/peasy-document-go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://agentgif.com/badge/github/peasytools/peasy-document-go/stars.svg)](https://github.com/peasytools/peasy-document-go)
 
 Go client for the [PeasyFormats](https://peasyformats.com) API -- convert between Markdown, JSON, YAML, CSV, and other document formats with tools for format identification, MIME type lookup, and structured data transformation. Zero dependencies beyond the Go standard library.
 
