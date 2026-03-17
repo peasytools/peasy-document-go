@@ -1,0 +1,152 @@
+# peasy-document-go
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/peasytools/peasy-document-go.svg)](https://pkg.go.dev/github.com/peasytools/peasy-document-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/peasytools/peasy-document-go)](https://goreportcard.com/report/github.com/peasytools/peasy-document-go)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+Go client for the [PeasyFormats](https://peasyformats.com) API — Markdown, HTML, CSV, and JSON conversion. Zero dependencies beyond the Go standard library.
+
+Built from [PeasyFormats](https://peasyformats.com), a comprehensive document conversion toolkit offering free online tools for converting between Markdown, HTML, CSV, JSON, and other document formats with detailed format guides and glossary.
+
+> **Try the interactive tools at [peasyformats.com](https://peasyformats.com)** — [Document Tools](https://peasyformats.com/), [Document Glossary](https://peasyformats.com/glossary/), [Document Guides](https://peasyformats.com/guides/)
+
+## Install
+
+```bash
+go get github.com/peasytools/peasy-document-go
+```
+
+Requires Go 1.21+.
+
+## Quick Start
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	peasydocument "github.com/peasytools/peasy-document-go"
+)
+
+func main() {
+	client := peasydocument.New()
+	ctx := context.Background()
+
+	// List available document tools
+	tools, err := client.ListTools(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range tools.Results {
+		fmt.Printf("%s: %s\n", t.Name, t.Description)
+	}
+}
+```
+
+## API Client
+
+The client wraps the [PeasyFormats REST API](https://peasyformats.com/developers/) with typed Go structs and zero external dependencies.
+
+```go
+client := peasydocument.New()
+// Or with a custom base URL:
+// client := peasydocument.New(peasydocument.WithBaseURL("https://custom.example.com"))
+ctx := context.Background()
+
+// List tools with pagination
+tools, _ := client.ListTools(ctx, &peasydocument.ListOptions{Page: 1, Limit: 10})
+
+// Get a specific tool by slug
+tool, _ := client.GetTool(ctx, "markdown-to-html")
+fmt.Println(tool.Name, tool.Description)
+
+// Search across all content
+results, _ := client.Search(ctx, "csv to json", nil)
+fmt.Printf("Found %d tools\n", len(results.Results.Tools))
+
+// Browse the glossary
+glossary, _ := client.ListGlossary(ctx, &peasydocument.ListOptions{Search: str("encoding")})
+for _, term := range glossary.Results {
+	fmt.Printf("%s: %s\n", term.Term, term.Definition)
+}
+
+// Discover guides
+guides, _ := client.ListGuides(ctx, &peasydocument.ListGuidesOptions{Category: str("conversion")})
+for _, g := range guides.Results {
+	fmt.Printf("%s (%s)\n", g.Title, g.AudienceLevel)
+}
+
+// List file format conversions
+conversions, _ := client.ListConversions(ctx, &peasydocument.ListConversionsOptions{Source: str("markdown")})
+
+// Get format details
+format, _ := client.GetFormat(ctx, "csv")
+fmt.Printf("%s (%s): %s\n", format.Name, format.Extension, format.MimeType)
+```
+
+Helper for optional string parameters:
+
+```go
+func str(s string) *string { return &s }
+```
+
+### Available Methods
+
+| Method | Description |
+|--------|-------------|
+| `ListTools(ctx, opts)` | List tools (paginated, filterable) |
+| `GetTool(ctx, slug)` | Get tool by slug |
+| `ListCategories(ctx, opts)` | List tool categories |
+| `ListFormats(ctx, opts)` | List file formats |
+| `GetFormat(ctx, slug)` | Get format by slug |
+| `ListConversions(ctx, opts)` | List format conversions |
+| `ListGlossary(ctx, opts)` | List glossary terms |
+| `GetGlossaryTerm(ctx, slug)` | Get glossary term |
+| `ListGuides(ctx, opts)` | List guides |
+| `GetGuide(ctx, slug)` | Get guide by slug |
+| `ListUseCases(ctx, opts)` | List use cases |
+| `Search(ctx, query, limit)` | Search across all content |
+| `ListSites(ctx)` | List Peasy sites |
+| `OpenAPISpec(ctx)` | Get OpenAPI specification |
+
+Full API documentation at [peasyformats.com/developers/](https://peasyformats.com/developers/).
+OpenAPI 3.1.0 spec: [peasyformats.com/api/openapi.json](https://peasyformats.com/api/openapi.json).
+
+## Learn More
+
+- **Tools**: [Markdown to HTML](https://peasyformats.com/tools/markdown-to-html/) · [CSV to JSON](https://peasyformats.com/tools/csv-to-json/) · [HTML to PDF](https://peasyformats.com/tools/html-to-pdf/) · [All Tools](https://peasyformats.com/)
+- **Guides**: [Markdown Syntax Guide](https://peasyformats.com/guides/markdown-syntax/) · [All Guides](https://peasyformats.com/guides/)
+- **Glossary**: [Markdown](https://peasyformats.com/glossary/markdown/) · [CSV](https://peasyformats.com/glossary/csv/) · [All Terms](https://peasyformats.com/glossary/)
+- **Formats**: [Markdown](https://peasyformats.com/formats/markdown/) · [CSV](https://peasyformats.com/formats/csv/) · [All Formats](https://peasyformats.com/formats/)
+- **API**: [REST API Docs](https://peasyformats.com/developers/) · [OpenAPI Spec](https://peasyformats.com/api/openapi.json)
+
+## Also Available
+
+| Language | Package | Install |
+|----------|---------|---------|
+| **Python** | [peasy-document](https://pypi.org/project/peasy-document/) | `pip install "peasy-document[all]"` |
+| **TypeScript** | [peasy-document](https://www.npmjs.com/package/peasy-document) | `npm install peasy-document` |
+| **Rust** | [peasy-document](https://crates.io/crates/peasy-document) | `cargo add peasy-document` |
+| **Ruby** | [peasy-document](https://rubygems.org/gems/peasy-document) | `gem install peasy-document` |
+
+## Peasy Developer Tools
+
+Part of the [Peasy Tools](https://peasytools.com) open-source developer ecosystem.
+
+| Package | PyPI | npm | Go | Description |
+|---------|------|-----|----|-------------|
+| peasy-pdf | [PyPI](https://pypi.org/project/peasy-pdf/) | [npm](https://www.npmjs.com/package/peasy-pdf) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-pdf-go) | PDF merge, split, rotate, compress — [peasypdf.com](https://peasypdf.com) |
+| peasy-image | [PyPI](https://pypi.org/project/peasy-image/) | [npm](https://www.npmjs.com/package/peasy-image) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-image-go) | Image resize, crop, convert, compress — [peasyimage.com](https://peasyimage.com) |
+| peasy-audio | [PyPI](https://pypi.org/project/peasy-audio/) | [npm](https://www.npmjs.com/package/peasy-audio) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-audio-go) | Audio trim, merge, convert, normalize — [peasyaudio.com](https://peasyaudio.com) |
+| peasy-video | [PyPI](https://pypi.org/project/peasy-video/) | [npm](https://www.npmjs.com/package/peasy-video) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-video-go) | Video trim, resize, thumbnails, GIF — [peasyvideo.com](https://peasyvideo.com) |
+| peasy-css | [PyPI](https://pypi.org/project/peasy-css/) | [npm](https://www.npmjs.com/package/peasy-css) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-css-go) | CSS minify, format, analyze — [peasycss.com](https://peasycss.com) |
+| peasy-compress | [PyPI](https://pypi.org/project/peasy-compress/) | [npm](https://www.npmjs.com/package/peasy-compress) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-compress-go) | ZIP, TAR, gzip compression — [peasytools.com](https://peasytools.com) |
+| **peasy-document** | [PyPI](https://pypi.org/project/peasy-document/) | [npm](https://www.npmjs.com/package/peasy-document) | [Go](https://pkg.go.dev/github.com/peasytools/peasy-document-go) | **Markdown, HTML, CSV, JSON conversion — [peasyformats.com](https://peasyformats.com)** |
+| peasytext | [PyPI](https://pypi.org/project/peasytext/) | [npm](https://www.npmjs.com/package/peasytext) | [Go](https://pkg.go.dev/github.com/peasytools/peasytext-go) | Text case conversion, slugify, word count — [peasytext.com](https://peasytext.com) |
+
+## License
+
+MIT
