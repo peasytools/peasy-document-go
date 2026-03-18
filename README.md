@@ -12,7 +12,7 @@ Built from [PeasyFormats](https://peasyformats.com), a comprehensive document co
 > **Try the interactive tools at [peasyformats.com](https://peasyformats.com)** -- [Markdown to HTML](https://peasyformats.com/doc/markdown-to-html/), [YAML/JSON Converter](https://peasyformats.com/doc/yaml-json-converter/), [Format Identifier](https://peasyformats.com/doc/format-identifier/), and more.
 
 <p align="center">
-  <img src="demo.gif" alt="peasy-document-go demo -- Markdown, JSON, YAML, and CSV conversion tools in Go terminal" width="800">
+  <a href="https://agentgif.com/RTN86ZhL"><img src="https://media.agentgif.com/RTN86ZhL.gif" alt="peasy-document-go demo -- Markdown, JSON, YAML, and CSV conversion tools in Go terminal" width="800"></a>
 </p>
 
 ## Table of Contents
